@@ -19,9 +19,9 @@ fn main() {
         let mut last_launch = Instant::now() - Duration::from_secs(1);
         for line in io::stdin().lock().lines() {
             let _ = line.expect("Error from stdin");
-            if last_launch.elapsed() >= Duration::from_secs(1) {
+            if last_launch.elapsed() >= Duration::from_millis(100) {
+                let _ = Command::new("iwgtk").spawn().expect("Failed to open iwgtk").wait();
                 last_launch = Instant::now();
-                let _ = Command::new("iwgtk").spawn();
             }
         }
     }
@@ -47,7 +47,7 @@ fn listen_and_print_status() {
     loop {
         // Print again only if at least 100ms has passed
         if last_print.elapsed() >= Duration::from_millis(100) {
-            // Get the SSID uwing iwgetid
+            // Get the SSID using iwgetid
             let ssid = std::str::from_utf8(
                 &Command::new("iwgetid")
                     .arg("-r")
